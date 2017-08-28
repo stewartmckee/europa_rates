@@ -13,7 +13,7 @@ module EuropaRates
       def rates_at(date=Date.today)
         result = @store.hgetall(date_key(date))
         raise NoDataAvailableError if result.nil?
-        result  
+        result
       end
 
       def set_rates_for(date, rates)
