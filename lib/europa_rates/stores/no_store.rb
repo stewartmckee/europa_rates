@@ -15,6 +15,10 @@ module EuropaRates
         raise "Cannot set rates for live data"
       end
 
+      def currencies_available
+        @xml.keys.map{|k| k.keys }.flatten.uniq
+      end
+
     end
   end
 end

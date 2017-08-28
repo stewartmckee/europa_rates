@@ -18,8 +18,17 @@ module EuropaRates
 
       def set_rates_for(date, rates)
         rates.each do |symbol, rate|
-          @store.hset(date_key(date), symbol, rate)
+          key = date_key(date)
+          @store.hset(key, symbol, rate)
+          @store.sadd("currencies", symbol)
         end
+      end
+
+      def currencies_available
+        if @store.smembers("currencies").empty?
+          update!
+        end
+        @store.smembers("currencies")
       end
 
     end

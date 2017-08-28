@@ -15,7 +15,18 @@ module EuropaRates
 
       def set_rates_for(date, rates)
         @store.transaction do
+          currencies = @store["currencies"] || []
           @store[date_key(date)] = rates
+          rates.keys.map { |currency| currencies << currency }
+          @store["currencies"] = currencies.uniq
+        end
+      end
+
+      def currencies_available
+        currencies = @store.transaction { @store["currencies"] }
+        update! if currencies.nil?
+        @store.transaction do
+          @store["currencies"]
         end
       end
 
