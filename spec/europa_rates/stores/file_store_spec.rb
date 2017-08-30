@@ -18,14 +18,20 @@ RSpec.describe EuropaRates::Stores::FileStore do
 
     it "stores values for date" do
       expect(@yaml_store).to receive("[]=").with("date_2017_08_21", {"USD" => 1.2, "GBP" => 0.9})
+      expect(@yaml_store).to receive("[]").with("currencies").and_return(["USD"])
+      expect(@yaml_store).to receive("[]=").with("currencies", anything())
       @store.set_rates_for(Date.parse("21st August 2017"), {"USD" => 1.2, "GBP" => 0.9})
     end
     it "only stores values of supplied date" do
       expect(@yaml_store).to receive("[]=").with("date_2017_08_21", {"USD" => 1.2, "GBP" => 0.9})
+      expect(@yaml_store).to receive("[]").with("currencies").and_return(["USD"])
+      expect(@yaml_store).to receive("[]=").with("currencies", anything())
       @store.set_rates_for(Date.parse("21st August 2017"), {"USD" => 1.2, "GBP" => 0.9})
     end
     it "does not duplicate values for dates" do
       expect(@yaml_store).to receive("[]=").twice.with("date_2017_08_21", anything())
+      expect(@yaml_store).to receive("[]").twice.with("currencies").and_return(["USD"])
+      expect(@yaml_store).to receive("[]=").twice.with("currencies", anything())
       @store.set_rates_for(Date.parse("21st August 2017"), {"USD" => 1.3, "GBP" => 0.1})
       @store.set_rates_for(Date.parse("21st August 2017"), {"USD" => 1.2, "GBP" => 0.9})
     end
